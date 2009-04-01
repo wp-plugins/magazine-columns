@@ -1,18 +1,50 @@
 var columns_toolbar = document.getElementById("ed_toolbar");
 
 if (columns_toolbar) {
-  var theButton = document.createElement('input');
-  theButton.type = 'button';
-  theButton.value = 'columns';
-  theButton.onclick = columns_button;
-  theButton.className = 'ed_button';
-  theButton.title = 'Pluggy!';
-  theButton.id = 'ed_Pluggy';
-  columns_toolbar.appendChild(theButton);
+	var startButton = document.createElement('input');
+	startButton.type = 'button';
+	startButton.value = 'start columns';
+	startButton.onclick = start_button;
+	startButton.className = 'ed_button';
+	startButton.title = 'start columns';
+	startButton.id = 'ed_startColumn';
+	columns_toolbar.appendChild(startButton);
+
+	var columnButton = document.createElement('input');
+	columnButton.type = 'button';
+	columnButton.value = 'column';
+	columnButton.onclick = columns_button;
+	columnButton.className = 'ed_button';
+	columnButton.title = 'column';
+	columnButton.id = 'ed_column';
+	columns_toolbar.appendChild(columnButton);
+
+	var stopButton = document.createElement('input');
+	stopButton.type = 'button';
+	stopButton.value = 'stop columns';
+	stopButton.onclick = stop_button;
+	stopButton.className = 'ed_button';
+	stopButton.title = 'stop columns';
+	stopButton.id = 'ed_stopColumn';
+	columns_toolbar.appendChild(stopButton);
+}
+
+function start_button(querystr) {
+	var text = "<!--startcolumns-->";
+	pos(text)
 }
 
 function columns_button(querystr) {
 	var text = "<!--column-->";
+	pos(text);
+}
+
+function stop_button(querystr) {
+	var text = "<!--stopcolumns-->";
+	pos(text);
+}
+
+function pos(text) {
 	var areaId = 'content';
 	var txtarea = document.getElementById(areaId);
 	var scrollPos = txtarea.scrollTop;
@@ -44,5 +76,5 @@ function columns_button(querystr) {
 		txtarea.selectionEnd = strPos;
 		txtarea.focus();
 	}
-	txtarea.scrollTop = scrollPos;
+	txtarea.scrollTop = scrollPos;	
 }

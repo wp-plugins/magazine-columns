@@ -4,14 +4,24 @@ Plugin Name: Magazine Columns
 Plugin URI: http://bavotasan.com/downloads/magazine-columns-wordpress-plugin/
 Description: Divides your post or page content into two or more columns, like a magazine article.
 Author: c.bavota
-Version: 1.0.1
+Version: 1.0.2
 Author URI: http://www.bavotasan.com/
 */
 
 // Replace the_content function if a <!--column--> tag is detected
 function add_columns($content) {
 	if(stristr($content, '<!--column-->') && is_single()) {
-		$content = preg_replace('/width="([0-9]*)" height="([0-9]*)"/', '',$content);
+		if(stristr($content, '<!--startcolumns-->')) {
+			$topcontent = explode('<!--startcolumns-->', $content);
+			if(stristr($content, '<!--stopcolumns-->')) {
+				$bottomcontent = explode('<!--stopcolumns-->', $topcontent[1]);
+				$content = preg_replace('/width="([0-9]*)" height="([0-9]*)"/', '',$bottomcontent[0]);
+			} else {
+				$content = preg_replace('/width="([0-9]*)" height="([0-9]*)"/', '',$topcontent[1]);
+			}
+		} else {
+			$content = preg_replace('/width="([0-9]*)" height="([0-9]*)"/', '',$content);		
+		}
 		$content = explode('<!--column-->', $content);
 		$count = count($content);
 		if($count == 2) {
@@ -24,6 +34,7 @@ function add_columns($content) {
 			$colname = "col_five";
 		}		
 		$x = 1;
+		if($topcontent[0]) { echo $topcontent[0]; }
 		foreach($content as $column) {
 			add_columns_css($count);
 			if($x ==5) {
@@ -31,13 +42,19 @@ function add_columns($content) {
 			unset($content[1]);
 			unset($content[2]);
 			unset($content[3]);
-			$column = implode(" ", $content);
+			$column = implode("", $content);
 			echo '<div class="columns" id="'.$colname.$x.'">'.$column.'</div>';
 			break;
 			} else {
 			echo '<div class="columns" id="'.$colname.$x.'">'.$column.'</div>';
 			}
 			$x++;
+		}
+		if($bottomcontent[1]) { 
+			$bottom = explode('<br />',$bottomcontent[1]);
+			$bottom[0] = '<br class="clear" />';
+			$bottom = implode("", $bottom);
+			echo $bottom;
 		}
 	} else {
 		return $content;
@@ -74,6 +91,7 @@ function add_columns_css($count) {
 	echo "	#col_five4 { float: left; width: ".$five."%; margin: 0 5% 0 2.5%; }";
 	}
 	echo "	.columns img { width: 98% }";
+	echo "	br.clear { clear: both; }";
 	echo "</style>\n";
 }
 
