@@ -4,7 +4,7 @@ Donate Link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: magazine columns, multiple post columns, columns, magazine, post columns, page columns
 Requires at least: 2.7
 Tested up to: 2.7.1
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 
 Divides your post or page content into two or more columns, like a magazine article.
 
@@ -31,7 +31,7 @@ Just add the &lt;!--column--&gt; tag to your post or pages up to four times to c
 
 3) What if I only want a portion of my post or page to have columns.
 
-Place &lt;!--startcolumns--&gt; where you want your columns to begin, and &lt;!--stopcolumns--&gt; where you would like them to end. Then add the &lt;!--column--&gt; tag within these tags to divide your text.
+Place &lt;!--startcolumns--&gt; where you want your columns to begin, and &lt;!--stopcolumns--&gt;  where you would like them to end. Then add the &lt;!--column--&gt; tag within these tags to divide your text.
 
 == Screenshots ==
 
@@ -39,7 +39,13 @@ Place &lt;!--startcolumns--&gt; where you want your columns to begin, and &lt;!-
 
 == Change Log ==
 
-Version 1.0.2 (2009-03-30)
+Version 1.0.3 (2009-04-01)
+<ul>
+<li>Fixed IE styles</li>
+<li>Removed extra line breaks</li>
+</ul>
+
+Version 1.0.2 (2009-03-31)
 <ul>
 <li>Added start and stop columns tags</li>
 </ul>
