@@ -31,7 +31,7 @@ Just add the &lt;!--column--&gt; tag to your post or pages up to four times to c
 
 3) What if I only want a portion of my post or page to have columns.
 
-Place `&lt;!--startcolumns--&gt;` where you want your columns to begin, and `&lt;!--stopcolumns--&gt;`  where you would like them to end. Then add the &lt;!--column--&gt; tag within these tags to divide your text.
+Place &lt;!--startcolumns--&gt; where you want your columns to begin, and &lt;!--stopcolumns--&gt; where you would like them to end. Then add the &lt;!--column--&gt; tag within these tags to divide your text.
 
 == Screenshots ==
 
