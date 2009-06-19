@@ -3,7 +3,7 @@ Contributors: c.bavota
 Donate Link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=1929921
 Tags: magazine columns, multiple post columns, columns, magazine, post columns, page columns
 Requires at least: 2.7
-Tested up to: 2.7.1
+Tested up to: 2.8
 Stable tag: 1.0.3
 
 Divides your post or page content into two or more columns, like a magazine article.
