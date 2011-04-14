@@ -4,13 +4,13 @@ Plugin Name: Magazine Columns
 Plugin URI: http://bavotasan.com/downloads/magazine-columns-wordpress-plugin/
 Description: Divides your post or page content into two or more columns, like a magazine article.
 Author: c.bavota
-Version: 1.0.3
+Version: 1.0.4
 Author URI: http://www.bavotasan.com/
 */
 
 // Replace the_content function if a <!--column--> tag is detected
 function add_columns($content) { 
-	if(stristr($content, '<!--column-->') && is_single()) {
+	if(stristr($content, '<!--column-->') && is_singular()) {
 		if(stristr($content, '<!--startcolumns-->')) {
 			$topcontent = explode('<!--startcolumns-->', $content);
 			if(stristr($content, '<!--stopcolumns-->')) {
@@ -34,18 +34,17 @@ function add_columns($content) {
 			$colname = "col_five";
 		}		
 		$x = 1;
-		if($topcontent[0]) {
+		if(!empty($topcontent[0])) {
 			$top = explode('<br />',$topcontent[0]);
 			$i = count($top);
-			$top[$i-1] = '</p>'."\n";
+			$top[$i-1] .= '</p>'."\n";
 			$top = implode("", $top);
 			echo $top;
 		}		
-		add_columns_css($count);
 		foreach($content as $column) {
 			$output = '<div class="columns" id="'.$colname.$x.'">'.$column.'</div>';
 			$output = str_replace('<div class="columns" id="'.$colname.$x.'"><br />','<div class="columns" id="'.$colname.$x.'"><p>', $output);
-			if($x ==5) {
+			if($x == 5) {
 				unset($content[0]);
 				unset($content[1]);
 				unset($content[2]);
@@ -58,9 +57,9 @@ function add_columns($content) {
 			}
 			$x++;
 		}
-		if($bottomcontent[1]) { 
+		if(!empty($bottomcontent[1])) { 
 			$bottom = explode('<br />',$bottomcontent[1]);
-			$bottom[0] = '<p class="clear" />';
+			$bottom[0] = '<p style="clear: both;">' . $bottom[0];
 			$bottom = implode("", $bottom);
 			echo $bottom;
 		}
@@ -73,35 +72,44 @@ function add_columns($content) {
 add_filter('the_content', 'add_columns');
 
 // Creates the CSS for columns
-function add_columns_css($count) {
-	$two = 47; // width of two columns
-	$three = 29.5; // width of three columns
-	$four = 21; // width of four columns
-	$five = 15; // width of five columns 
-	echo "<style type='text/css'>";
-	if($count == 2) {
-	echo " #col_two1 { float: left; width: ".$two."%; }";
-	echo " #col_two2 { float: left; width: ".$two."%; margin: 0 0 0 5%; }";
+function add_columns_css() {
+	global $post;
+	$content = $post->post_content;
+	if(stristr($content, '<!--column-->') && is_singular()) {
+		$content = explode('<!--column-->', $content);
+		$count = count($content);	
+	
+		$two = 47; // width of two columns
+		$three = 29.5; // width of three columns
+		$four = 21; // width of four columns
+		$five = 15; // width of five columns 
+		echo '<!-- Magazine Columns CSS -->'."\n";
+		echo "<style type='text/css'>\n";
+		if($count == 2) {
+		echo " #col_two1 { float: left; width: ".$two."%; }\n";
+		echo " #col_two2 { float: left; width: ".$two."%; margin: 0 0 0 5%; }\n";
+		}
+		if($count == 3) {	
+		echo " #col_three1, #col_three3 { float: left; width: ".$three."%; }\n";
+		echo " #col_three2 { float: left; width: ".$three."%; margin: 0 5%; }\n";
+		}
+		if($count == 4) {
+		echo " #col_four1, #col_four4 { float: left; width: ".$four."%; }";
+		echo " #col_four2 { float: left; width: ".$four."%; margin: 0 2.5% 0 5%; }\n";
+		echo " #col_four3 { float: left; width: ".$four."%; margin: 0 5% 0 2.5%; }\n";
+		}
+		if($count == 5) {
+		echo " #col_five1, #col_five5 { float: left; width: ".$five."%; }\n";
+		echo " #col_five2 { float: left; width: ".$five."%; margin: 0 2.5% 0 5%; }\n";
+		echo " #col_five3 { float: left; width: ".$five."%; margin: 0 2.5% 0 5%; }\n";
+		echo " #col_five4 { float: left; width: ".$five."%; margin: 0 5% 0 2.5%; }\n";
+		}
+		echo " .columns img { width: 98% }\n";
+		echo "</style>\n";
+		echo '<!-- eof Magazine Columns CSS -->'."\n";
 	}
-	if($count == 3) {	
-	echo " #col_three1, #col_three3 { float: left; width: ".$three."%; }";
-	echo " #col_three2 { float: left; width: ".$three."%; margin: 0 5%; }";
-	}
-	if($count == 4) {
-	echo " #col_four1, #col_four4 { float: left; width: ".$four."%; }";
-	echo " #col_four2 { float: left; width: ".$four."%; margin: 0 2.5% 0 5%; }";
-	echo " #col_four3 { float: left; width: ".$four."%; margin: 0 5% 0 2.5%; }";
-	}
-	if($count == 5) {
-	echo " #col_five1, #col_five5 { float: left; width: ".$five."%; }";
-	echo " #col_five2 { float: left; width: ".$five."%; margin: 0 2.5% 0 5%; }";
-	echo " #col_five3 { float: left; width: ".$five."%; margin: 0 2.5% 0 5%; }";
-	echo " #col_five4 { float: left; width: ".$five."%; margin: 0 5% 0 2.5%; }";
-	}
-	echo " .columns img { width: 98% }";
-	echo " br.clear { clear: both; }";
-	echo "</style>\n";
 }
+add_action('wp_head', 'add_columns_css');
 
 // Creates the columns quicktag button
 function columns_quicktag_button() {
