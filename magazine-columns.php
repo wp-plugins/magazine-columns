@@ -4,7 +4,7 @@ Plugin Name: Magazine Columns
 Plugin URI: http://bavotasan.com/downloads/magazine-columns-wordpress-plugin/
 Description: Divides your post or page content into two or more columns, like a magazine article.
 Author: c.bavota
-Version: 1.0.5
+Version: 1.0.6
 Author URI: http://www.bavotasan.com/
 License: GPL2
 */
@@ -88,9 +88,10 @@ add_action( 'wp_head', 'add_magazine_columns_css' );
  */
 function add_magazine_columns_css() {
 	global $post;
-	$content = $post->post_content;
-	if ( stristr( $content, '<!--column-->' ) && is_singular() ) {
-		?>
+	if ( is_singular() ) {
+		$content = $post->post_content;
+		if ( stristr( $content, '<!--column-->' ) ) {
+			?>
 <!-- Magazine Columns CSS -->
 <style type='text/css'>
 #magazine-columns{margin:0 -20px;margin-bottom:1em;overflow:hidden}
@@ -104,7 +105,8 @@ function add_magazine_columns_css() {
 .column img{max-width:100%;height:auto}
 </style>
 <!-- /Magazine Columns CSS -->
-		<?php
+			<?php
+		}
 	}
 }
 

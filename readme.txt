@@ -4,7 +4,7 @@ Donate Link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_i
 Tags: magazine columns, multiple post columns, columns, magazine, post columns, page columns
 Requires at least: 2.7
 Tested up to: 3.4.2
-Stable tag: 1.0.5
+Stable tag: 1.0.6
 
 Divides your post or page content into two or more columns, like a magazine article.
 
@@ -38,6 +38,11 @@ Place &lt;!--startcolumns--&gt; where you want your columns to begin, and &lt;!-
 1. Two columns
 
 == Change Log ==
+
+Version 1.0.6 (2012-10-04)
+<ul>
+<li>Bug fix</li>
+</ul>
 
 Version 1.0.5 (2012-10-04)
 <ul>
