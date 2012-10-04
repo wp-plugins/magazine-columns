@@ -1,16 +1,16 @@
 === Magazine Columns ===
 Contributors: c.bavota
-Donate Link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=1929921
+Donate Link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=cbavota%40gmail%2ecom&lc=US&no_note=0&currency_code=CAD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest
 Tags: magazine columns, multiple post columns, columns, magazine, post columns, page columns
 Requires at least: 2.7
-Tested up to: 3.1.1
-Stable tag: 1.0.4
+Tested up to: 3.4.2
+Stable tag: 1.0.5
 
 Divides your post or page content into two or more columns, like a magazine article.
 
 == Description ==
 
-This plugin creates magazine style columns in your posts and pages. 
+This plugin creates magazine style columns in your posts and pages.
 
 == Installation ==
 
@@ -19,11 +19,11 @@ This plugin creates magazine style columns in your posts and pages.
 3. Activate the plugin through the 'Plugins' menu in WordPress.
 4. Use the `column` quicktag in the HTML editor to add the &lt;!--column--&gt; tag to your posts or pages.
 
-== Frequently Asked Questions == 
+== Frequently Asked Questions ==
 
 1) How do I create columns in my posts or pages?
 
-Just add &lt;!--column--&gt; to your posts or pages with the `column` quicktag button in the HTML editor or add it manually. 
+Just add &lt;!--column--&gt; to your posts or pages with the `column` quicktag button in the HTML editor or add it manually.
 
 2) How do I create more columns?
 
@@ -38,6 +38,14 @@ Place &lt;!--startcolumns--&gt; where you want your columns to begin, and &lt;!-
 1. Two columns
 
 == Change Log ==
+
+Version 1.0.5 (2012-10-04)
+<ul>
+<li>Updated donate link</li>
+<li>Recoded everything to improve functionality</li>
+<li>Added assets</li>
+<li>Tested up to WP 3.4.2</li>
+</ul>
 
 Version 1.0.4 (2011-04-14)
 <ul>

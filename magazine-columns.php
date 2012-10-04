@@ -4,123 +4,116 @@ Plugin Name: Magazine Columns
 Plugin URI: http://bavotasan.com/downloads/magazine-columns-wordpress-plugin/
 Description: Divides your post or page content into two or more columns, like a magazine article.
 Author: c.bavota
-Version: 1.0.4
+Version: 1.0.5
 Author URI: http://www.bavotasan.com/
+License: GPL2
 */
 
-// Replace the_content function if a <!--column--> tag is detected
-function add_columns($content) { 
-	if(stristr($content, '<!--column-->') && is_singular()) {
-		if(stristr($content, '<!--startcolumns-->')) {
-			$topcontent = explode('<!--startcolumns-->', $content);
-			if(stristr($content, '<!--stopcolumns-->')) {
-				$bottomcontent = explode('<!--stopcolumns-->', $topcontent[1]);
-				$content = preg_replace('/width="([0-9]*)" height="([0-9]*)"/', '',$bottomcontent[0]);
-			} else {
-				$content = preg_replace('/width="([0-9]*)" height="([0-9]*)"/', '',$topcontent[1]);
+/*  Copyright 2012  c.bavota  (email : cbavota@gmail.com)
+
+    This program is free software; you can redistribute it and/or modify
+    it under the terms of the GNU General Public License, version 2, as
+    published by the Free Software Foundation.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program; if not, write to the Free Software
+    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+*/
+
+add_filter( 'the_content', 'add_magazine_columns' );
+/**
+ * Separate the post content into columns.
+ *
+ * This function is attached to the 'the_content' filter hook.
+ *
+ * @param	string $content		The post content
+ *
+ * @return	string Modified to include columns
+ */
+function add_magazine_columns( $content ) {
+	if ( stristr( $content, '<!--column-->' ) && is_singular() ) {
+		$col_content = $content;
+		$content = '';
+		if ( stristr( $col_content, '<!--startcolumns-->' ) ) {
+			$topcontent = explode( '<!--startcolumns-->', $col_content );
+			$col_content = $topcontent[1];
+
+			if ( stristr( $col_content, '<!--stopcolumns-->' ) ) {
+				$bottomcontent = explode( '<!--stopcolumns-->', $col_content );
+				$col_content = $bottomcontent[0];
 			}
-		} else {
-			$content = preg_replace('/width="([0-9]*)" height="([0-9]*)"/', '',$content);		
 		}
-		$content = explode('<!--column-->', $content);
-		$count = count($content);
-		if($count == 2) {
-			$colname = "col_two";
-		} elseif($count == 3) {
-			$colname = "col_three";
-		} elseif($count == 4) {
-			$colname = "col_four";
-		} else {
-			$colname = "col_five";
-		}		
-		$x = 1;
-		if(!empty($topcontent[0])) {
-			$top = explode('<br />',$topcontent[0]);
-			$i = count($top);
-			$top[$i-1] .= '</p>'."\n";
-			$top = implode("", $top);
-			echo $top;
-		}		
-		foreach($content as $column) {
-			$output = '<div class="columns" id="'.$colname.$x.'">'.$column.'</div>';
-			$output = str_replace('<div class="columns" id="'.$colname.$x.'"><br />','<div class="columns" id="'.$colname.$x.'"><p>', $output);
-			if($x == 5) {
-				unset($content[0]);
-				unset($content[1]);
-				unset($content[2]);
-				unset($content[3]);
-				$column = implode("", $content);
-				echo $output;
-				break;
-			} else {
-			echo $output;
-			}
-			$x++;
+
+		$col_content = explode( '<!--column-->', $col_content );
+		$count = count( $col_content );
+
+		if ( ! empty( $topcontent[0] ) ) {
+			$top = explode( '<br />', $topcontent[0] );
+			$i = count( $top );
+			$top[$i-1] .= '</p>' . "\n";
+			$content .= implode( '', $top );
 		}
-		if(!empty($bottomcontent[1])) { 
-			$bottom = explode('<br />',$bottomcontent[1]);
-			$bottom[0] = '<p style="clear: both;">' . $bottom[0];
-			$bottom = implode("", $bottom);
-			echo $bottom;
+
+		$content .= '<div id="magazine-columns">';
+
+		foreach( $col_content as $column ) {
+			$output = '<div class="column c' . $count . '">' . $column . '</div>';
+			$output = str_replace( '<div class="column c' . $count . '"><br />', '<div class="column c' . $count . '"><p>', $output );
+			$content .= $output;
 		}
-	} else {
-		return $content;
+
+		$content .= '</div>';
+
+		if ( ! empty( $bottomcontent[1] ) ) {
+			$bottom = explode( '<br />', $bottomcontent[1] );
+			$bottom[0] = '<p>' . $bottom[0];
+			$content .= = implode( '', $bottom );
+		}
 	}
+	return str_replace( '<p></p>', '', $content );
 }
 
-// Adds the add_columns() function to the_content()
-add_filter('the_content', 'add_columns');
-
-// Creates the CSS for columns
-function add_columns_css() {
+add_action( 'wp_head', 'add_magazine_columns_css' );
+/**
+ * Include the appropriate CSS into the page head.
+ *
+ * This function is attached to the 'wp_head' action hook.
+ *
+ * @return	string Echoed CSS
+ */
+function add_magazine_columns_css() {
 	global $post;
 	$content = $post->post_content;
-	if(stristr($content, '<!--column-->') && is_singular()) {
-		$content = explode('<!--column-->', $content);
-		$count = count($content);	
-	
-		$two = 47; // width of two columns
-		$three = 29.5; // width of three columns
-		$four = 21; // width of four columns
-		$five = 15; // width of five columns 
-		echo '<!-- Magazine Columns CSS -->'."\n";
-		echo "<style type='text/css'>\n";
-		if($count == 2) {
-		echo " #col_two1 { float: left; width: ".$two."%; }\n";
-		echo " #col_two2 { float: left; width: ".$two."%; margin: 0 0 0 5%; }\n";
-		}
-		if($count == 3) {	
-		echo " #col_three1, #col_three3 { float: left; width: ".$three."%; }\n";
-		echo " #col_three2 { float: left; width: ".$three."%; margin: 0 5%; }\n";
-		}
-		if($count == 4) {
-		echo " #col_four1, #col_four4 { float: left; width: ".$four."%; }";
-		echo " #col_four2 { float: left; width: ".$four."%; margin: 0 2.5% 0 5%; }\n";
-		echo " #col_four3 { float: left; width: ".$four."%; margin: 0 5% 0 2.5%; }\n";
-		}
-		if($count == 5) {
-		echo " #col_five1, #col_five5 { float: left; width: ".$five."%; }\n";
-		echo " #col_five2 { float: left; width: ".$five."%; margin: 0 2.5% 0 5%; }\n";
-		echo " #col_five3 { float: left; width: ".$five."%; margin: 0 2.5% 0 5%; }\n";
-		echo " #col_five4 { float: left; width: ".$five."%; margin: 0 5% 0 2.5%; }\n";
-		}
-		echo " .columns img { width: 98% }\n";
-		echo "</style>\n";
-		echo '<!-- eof Magazine Columns CSS -->'."\n";
+	if ( stristr( $content, '<!--column-->' ) && is_singular() ) {
+		?>
+<!-- Magazine Columns CSS -->
+<style type='text/css'>
+#magazine-columns{margin:0 -20px;margin-bottom:1em;overflow:hidden}
+.column {float:left;-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;padding:0 20px}
+.column.c2{width:50%}
+.column.c3{width:33.33%}
+.column.c4{width:25%}
+.column.c5{width:20%}
+.column p:first-child{margin-top:0}
+.column p:last-child{margin-bottom:0}
+.column img{max-width:100%;height:auto}
+</style>
+<!-- /Magazine Columns CSS -->
+		<?php
 	}
 }
-add_action('wp_head', 'add_columns_css');
 
-// Creates the columns quicktag button
-function columns_quicktag_button() {
-  if (strpos($_SERVER['REQUEST_URI'], 'post.php') ||
-      strpos($_SERVER['REQUEST_URI'], 'post-new.php') ||
-      strpos($_SERVER['REQUEST_URI'], 'page.php') ||
-      strpos($_SERVER['REQUEST_URI'], 'page-new.php')) {
-	echo '<script type="text/javascript" src="'  . get_option('siteurl') . '/wp-content/plugins/magazine-columns/js/mc.js"></script>';
-    }
+add_action( 'admin_print_scripts', 'add_magazine_columns_quicktags' );
+/**
+ * Add quicktags to the post editor.
+ *
+ * This function is attached to the 'admin_print_scripts' action hook.
+ */
+function add_magazine_columns_quicktags() {
+	wp_enqueue_script( 'my_custom_quicktags', plugins_url( 'magazine-columns/js/mc.js' ), array( 'quicktags' ) );
 }
-
-//Add the columns_quicktag_button() function to the proper admin pages
-add_filter('admin_footer', 'columns_quicktag_button');
-?>
