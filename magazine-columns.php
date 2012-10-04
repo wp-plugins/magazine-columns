@@ -72,7 +72,7 @@ function add_magazine_columns( $content ) {
 		if ( ! empty( $bottomcontent[1] ) ) {
 			$bottom = explode( '<br />', $bottomcontent[1] );
 			$bottom[0] = '<p>' . $bottom[0];
-			$content .= = implode( '', $bottom );
+			$content .= implode( '', $bottom );
 		}
 	}
 	return str_replace( '<p></p>', '', $content );
