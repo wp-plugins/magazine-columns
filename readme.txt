@@ -1,6 +1,6 @@
 === Magazine Columns ===
 Contributors: c.bavota
-Donate Link: https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=cbavota%40gmail%2ecom&lc=US&no_note=0&currency_code=CAD&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHostedGuest
+Donate Link: https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=4W58JWNBHWKK4
 Tags: magazine columns, multiple post columns, columns, magazine, post columns, page columns
 Requires at least: 2.7
 Tested up to: 3.4.2
